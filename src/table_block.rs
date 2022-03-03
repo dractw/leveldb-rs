@@ -15,7 +15,8 @@ use std::io::Read;
 
 /// Reads the data for the specified block handle from a file.
 fn read_bytes(f: &dyn RandomAccess, location: &BlockHandle) -> Result<Vec<u8>> {
-    let mut buf = vec![0; location.size()];
+    let mut buf = Vec::new();
+    buf.resize(location.size(), 0);
     f.read_at(location.offset(), &mut buf).map(|_| {
         let mut cloned = Vec::from(buf);
         cloned.shrink_to_fit();
