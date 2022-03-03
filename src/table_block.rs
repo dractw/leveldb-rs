@@ -18,7 +18,7 @@ fn read_bytes(f: &dyn RandomAccess, location: &BlockHandle) -> Result<Vec<u8>> {
     let mut buf = Vec::with_capacity(location.size());
     f.read_at(location.offset(), &mut buf).map(|_| {
         buf.shrink_to_fit();
-        buf
+        return buf
     })
 }
 
