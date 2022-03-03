@@ -32,7 +32,7 @@ pub type BlockContents = Vec<u8>;
 /// N_RESTARTS contains the number of restarts.
 #[derive(Clone)]
 pub struct Block {
-    block: Rc<BlockContents>,
+    block: BlockContents,
     opt: Options,
 }
 
@@ -59,14 +59,14 @@ impl Block {
         }
     }
 
-    pub fn contents(&self) -> Rc<BlockContents> {
+    pub fn contents(&self) -> BlockContents {
         self.block.clone()
     }
 
     pub fn new(opt: Options, contents: BlockContents) -> Block {
         assert!(contents.len() > 4);
         Block {
-            block: Rc::new(contents),
+            block: contents,
             opt,
         }
     }
@@ -77,7 +77,7 @@ impl Block {
 pub struct BlockIter {
     /// The underlying block contents.
     /// TODO: Maybe (probably...) this needs an Arc.
-    block: Rc<BlockContents>,
+    block: BlockContents,
     opt: Options,
     /// offset of restarts area within the block.
     restarts_off: usize,
