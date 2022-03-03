@@ -17,11 +17,7 @@ use std::io::Read;
 fn read_bytes(f: &dyn RandomAccess, location: &BlockHandle) -> Result<Vec<u8>> {
     let mut buf = Vec::new();
     buf.resize(location.size(), 0);
-    f.read_at(location.offset(), &mut buf).map(|_| {
-        let mut cloned = Vec::from(buf);
-        cloned.shrink_to_fit();
-        cloned
-    })
+    f.read_at(location.offset(), &mut buf).map(|_| buf)
 }
 
 /// Reads a serialized filter block from a file and returns a FilterBlockReader.
