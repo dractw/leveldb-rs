@@ -15,8 +15,11 @@ use std::io::Read;
 
 /// Reads the data for the specified block handle from a file.
 fn read_bytes(f: &dyn RandomAccess, location: &BlockHandle) -> Result<Vec<u8>> {
-    let mut buf = vec![0; location.size()];
-    f.read_at(location.offset(), &mut buf).map(|_| buf)
+    let mut buf = Vec::with_capacity(location.size());
+    f.read_at(location.offset(), &mut buf).map(|_| {
+        buf.shrink_to_fit();
+        buf
+    })
 }
 
 /// Reads a serialized filter block from a file and returns a FilterBlockReader.

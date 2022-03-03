@@ -1,3 +1,4 @@
+use std::borrow::Borrow;
 use block::{Block, BlockIter};
 use blockhandle::BlockHandle;
 use cache;
@@ -121,7 +122,7 @@ impl Table {
 
         // Two times as_ref(): First time to get a ref from Rc<>, then one from Box<>.
         let b =
-            table_block::read_table_block(self.opt.clone(), self.file.as_ref().as_ref(), location)?;
+            table_block::read_table_block(self.opt.clone(), self.file.as_ref().borrow(), location)?;
 
         // insert a cheap copy (Rc).
         self.opt
