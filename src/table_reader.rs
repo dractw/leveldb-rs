@@ -1,4 +1,3 @@
-use std::borrow::Borrow;
 use block::{Block, BlockIter};
 use blockhandle::BlockHandle;
 use cache;
@@ -9,6 +8,7 @@ use filter;
 use filter_block::FilterBlockReader;
 use key_types::InternalKey;
 use options::Options;
+use std::borrow::Borrow;
 use table_block;
 use table_builder::{self, Footer};
 use types::{current_key_val, LdbIterator};
@@ -121,8 +121,11 @@ impl Table {
         }
 
         // Two times as_ref(): First time to get a ref from Rc<>, then one from Box<>.
-        let b =
-            table_block::read_table_block(self.opt.clone(), self.file.as_ref().borrow(), location)?;
+        let b = table_block::read_table_block(
+            self.opt.clone(),
+            self.file.as_ref().as_ref().clone(),
+            location,
+        )?;
 
         // insert a cheap copy (Rc).
         self.opt
